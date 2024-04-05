@@ -11,15 +11,11 @@ async function search(req, res) {
     puppeteerExtra.use(stealthPlugin());
 
     const browser = await puppeteerExtra.launch({
-      headless: false,
-      // headless: "new",
-      // devtools: true,
+      headless: true, // Set headless to true to prevent Chrome browser from showing up
       executablePath: "", // your path here
     });
 
     const page = await browser.newPage();
-
-    // const query = "car sales kandy";
 
     try {
       await page.goto(
@@ -47,14 +43,11 @@ async function search(req, res) {
               totalHeight = 0;
               await new Promise((resolve) => setTimeout(resolve, scrollDelay));
 
-              // Calculate scrollHeight after waiting
               var scrollHeightAfter = wrapper.scrollHeight;
 
               if (scrollHeightAfter > scrollHeightBefore) {
-                // More content loaded, keep scrolling
                 return;
               } else {
-                // No more content loaded, stop scrolling
                 clearInterval(timer);
                 resolve();
               }
@@ -73,7 +66,6 @@ async function search(req, res) {
     await browser.close();
     console.log("browser closed");
 
-    // get all a tag parent where a tag href includes /maps/place/
     const $ = cheerio.load(html);
     const aTags = $("a");
     const parents = [];
@@ -93,16 +85,10 @@ async function search(req, res) {
 
     parents.forEach((parent) => {
       const url = parent.find("a").attr("href");
-      // get a tag where data-value="Website"
       const website = parent.find('a[data-value="Website"]').attr("href");
-      // find a div that includes the class fontHeadlineSmall
       const storeName = parent.find("div.fontHeadlineSmall").text();
-      // find span that includes class fontBodyMedium
-      const ratingText = parent
-        .find("span.fontBodyMedium > span")
-        .attr("aria-label");
+      const ratingText = parent.find("span.fontBodyMedium > span").attr("aria-label");
 
-      // get the first div that includes the class fontBodyMedium
       const bodyDiv = parent.find("div.fontBodyMedium").first();
       const children = bodyDiv.children();
       const lastChild = children.last();
@@ -134,9 +120,6 @@ async function search(req, res) {
     const end = Date.now();
 
     console.log(`time in seconds ${Math.floor((end - start) / 1000)}`);
-
-    // Print all responses in the terminal
-    //  console.log(businesses);
 
     res.send(businesses);
   } catch (error) {
