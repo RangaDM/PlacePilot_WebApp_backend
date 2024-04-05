@@ -3,7 +3,8 @@ const puppeteerExtra = require("puppeteer-extra");
 const stealthPlugin = require("puppeteer-extra-plugin-stealth");
 
 async function search(req, res) {
-  // const place = req.body.place;
+  const query = req.body.query;
+  console.log("query", query);
   try {
     const start = Date.now();
 
@@ -18,7 +19,7 @@ async function search(req, res) {
 
     const page = await browser.newPage();
 
-    const query = "car sales kandy";
+    // const query = "car sales kandy";
 
     try {
       await page.goto(

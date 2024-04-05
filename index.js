@@ -6,9 +6,12 @@ const app = express();
 
 // Enable CORS for all routes
 app.use(cors());
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: false }));
 
 // Define your routes
-app.get("/", MapFunc.search);
+app.post("/", MapFunc.search);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
