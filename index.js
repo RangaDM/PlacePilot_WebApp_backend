@@ -12,6 +12,9 @@ app.use(express.urlencoded({ extended: false }));
 
 // Define your routes
 app.post("/search", MapFunc.search);
+app.get("/user", (req, res) => {
+  res.send("Hello from user");
+});
 
 // Start the server
 const PORT = process.env.PORT || 5000;
