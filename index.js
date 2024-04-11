@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Define your routes
-app.post("/", MapFunc.search);
+app.post("/search", MapFunc.search);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
